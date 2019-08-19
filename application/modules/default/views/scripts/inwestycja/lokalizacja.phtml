@@ -1,0 +1,25 @@
+<div id="inwest-lokalizacja">
+	<div class="fluid-container">
+		<div class="row">
+			<div class="col-3 inwestmenu">
+				<?php echo $this->render('inwestycja/aside.phtml');?>
+			</div>
+
+			<div class="col-9 inwestdesc">
+				<?=replace($this->strona_tekst);?>
+				
+				
+				<ul class="list-unstyled mb-0">
+<?php foreach($this->lista as $pozycja){?>
+					<li>
+						<span><img src="<?=$this->baseUrl;?>/files/upload/lokaliz-<?=$pozycja->grupa;?>.png" alt="<?=$pozycja->nazwa;?>"></span>
+						<h3><?=$pozycja->nazwa;?></h3>
+						<img src="<?=$this->baseUrl;?>/files/inwestycje/lokalizacja/<?=$pozycja->plik;?>" alt="<?=$pozycja->nazwa;?>">
+						<?=$pozycja->tekst;?>
+<?php } ?>
+				</ul>
+				
+			</div>
+		</div>
+	</div>
+</div>

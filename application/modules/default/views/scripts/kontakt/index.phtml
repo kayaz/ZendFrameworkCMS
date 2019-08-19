@@ -1,0 +1,100 @@
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37513.19014378531!2d15.940399794889824!3d54.0103298615371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47004b08968ee9e5%3A0xa14442a5b3691f18!2s78-200+Bia%C5%82ogard!5e0!3m2!1spl!2spl!4v1566141054878!5m2!1spl!2spl" width="100%" height="381" frameborder="0" style="border:0" allowfullscreen></iframe>
+<div id="maincontact">
+	<div class="fluid-container">
+		<div class="row no-gutters">
+			<div class="col-4">
+				<div class="maincontact-desc">
+					<div class="contact-info-header">
+						<h2 class="source after-title">Skontaktuj się z nami</h2>
+						<p class="section-title after-h2">Z przyjemnością odpowiemy na wszystkie Twoje pytania</p>
+					</div>
+					<div class="contact-info">
+					<?=replace($this->strona->tekst); ?>
+					</div>
+				</div>
+			</div>
+			<div class="col-8">
+				<form method="post" action="" class="validateform">
+					<div class="row">
+						<?php if($this->message == 1) :?>
+						<div id="formalert" class="col-12">
+							<div class="sendok"><p>Twoja wiadomość została wysłana. W najbliższym czasie skontaktujemy się z Państwem celem omówienia szczegółów!</p></div>
+						</div>
+						<?php endif; ?>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<h2 class="source after-title">Skontaktuj się z nami</h2>
+							<p class="section-title after-h2">Z przyjemnością odpowiemy na wszystkie Twoje pytania</p>
+						</div>
+					</div>
+					<div class="form-row row">
+						<div class="col-3">
+							<div class="inputs">
+								<div class="input">
+									<label for="form_imie">Imię</label>
+									<input name="imie" id="form_imie" class="validate[required]" placeholder="Imię" type="text">
+								</div>
+								<div class="input">
+									<label for="form_email">E-mail</label>
+									<input name="email" id="form_email" class="validate[required,custom[email]]" placeholder="E-mail" type="email">
+								</div>
+								<div class="input">
+									<label for="form_tel">Telefon</label>
+									<input name="telefon" id="form_tel" class="validate[custom[phone]]" placeholder="Telefon" type="tel">
+								</div>
+							</div>
+						</div>
+						<div class="col-9">
+							<div class="input">
+								<label for="form_wiadomosc">Treść wiadmości</label>
+								<textarea name="wiadomosc" id="form_wiadomosc" placeholder="Treść wiadomości"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-row row">
+						<div class="col-12 obowiazek">
+							<?=$this->rodo->obowiazek;?>
+						</div>
+					</div>
+					<div class="form-row row">
+						<div class="col-12 rules">
+						<?php foreach($this->regulkis as $regulka){?>
+							<label for="zgoda_<?=$regulka['id'];?>" class="rules-text"><input name="zgoda_<?=$regulka['id'];?>" id="zgoda_<?=$regulka['id'];?>" value="1" type="checkbox" <?php if($regulka['wymagane'] == 1){;?>class="validate[required]"<?php } ?> data-prompt-position="topLeft:0"><p><?=$regulka['tresc'];?></p></label>
+							<div class="clr"></div>
+						<?php } ?>
+						</div>
+					</div>
+					<div class="form-row row">
+						<div class="col-6">
+							<ul class="formicons list-unstyled mb-0">
+								<li class="formicons-address">
+								<?php $form_dane_1 = explode("\n", $this->header->form_dane_1);
+									foreach($form_dane_1 as $dane_1){
+								?>
+									<p><?=$dane_1;?></p>
+								<?php } ?>
+								</li>
+								<li class="formicons-contact">
+								<?php $form_dane_2 = explode("\n", $this->header->form_dane_2);
+									foreach($form_dane_2 as $dane_2){
+								?>
+									<p><?=$dane_2;?></p>
+								<?php } ?>
+								</li>
+							</ul>
+						</div>
+						<div class="col-6 col-6-form-submit">
+							<div class="input text-right">
+								<script type="text/javascript">
+									document.write("<button class=\"bttn bttn-send\" type=\"submit\">WYŚLIJ</button>");
+								</script>
+								<noscript><p><b>Do poprawnego działania, Java musi być włączona.</b><p></noscript>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

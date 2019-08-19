@@ -1,0 +1,36 @@
+<div id="dziennik">
+	<div class="fluid-container">
+		<div class="row">
+			<div class="col-3 inwestmenu">
+				<?php echo $this->render('inwestycja/aside.phtml');?>
+			</div>
+
+			<div class="col-9 inwestdesc">
+				<div class="row">
+<?php foreach($this->news as $news){?>
+					<div class="col-6 entry-post zrealizowana">
+						<div class="entry-shadow">
+							<article id="post-<?=$news->id;?>" itemscope itemType="http://schema.org/BlogPosting">
+								<a href="<?=$this->baseUrl; ?>/i/<?=$this->wybranytag;?>/w/<?=$news->id;?>,<?=zmiana($news->tytul);?>/" itemprop="url"><div class="image"><img src="<?=$this->baseUrl; ?>/files/inwestycje/news/thumbs/<?=$news->plik;?>" alt="<?=$news->tytul;?>"></div></a>
+								<div class="mainoffer-desc">
+									<div class="post-date small">
+										<?php $dateArray=explode('-',$news->data); ?>
+										<span class="month"><?= $dateArray[1];?>.<?= $dateArray[0];?></span>
+									</div>
+									<h2 class="source"><a href="<?=$this->baseUrl; ?>/i/<?=$this->wybranytag;?>/w/<?=$news->id;?>,<?=zmiana($news->tytul);?>/" title="<?=$news->tytul;?>" itemprop="url"><span itemprop="name headline"><?=$news->tytul;?></span></a></h2>
+									<div class="entry-content" itemprop="description">
+										<p><?=previewParser($news->wprowadzenie, 300);?> ...</p>
+										<a href="<?=$this->baseUrl; ?>/i/<?=$this->wybranytag;?>/w/<?=$news->id;?>,<?=zmiana($news->tytul);?>/" title="<?=$post->tytul;?>" class="bttn bttn-more">czytaj więcej</a>
+									</div>
+								</div>
+							</article>
+						</div>
+					</div>
+<?php } ?>
+				</div>
+			
+				<?php echo $this->paginationControl($this->news, 'Sliding', 'pagination.phtml'); ?>
+			</div>
+		</div>
+	</div>
+</div>

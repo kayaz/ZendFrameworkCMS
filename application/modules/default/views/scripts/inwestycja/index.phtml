@@ -1,0 +1,41 @@
+<?php 
+	if($this->inwestycjecount == 1){
+?>
+<?php foreach($this->inwestycje as $inwestycja){?>
+<div id="mainoffer" class="onlyone">
+	<div class="fluid-container">
+		<div class="row no-gutters">
+			<div class="col-12">
+				<div class="">
+					<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><img src="<?=$this->baseUrl;?>/files/inwestycje/header/<?=$inwestycja->header;?>" alt="<?=$inwestycja->nazwa;?>"></a>
+					<div class="mainoffer-desc">
+						<h2 class="source"><a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><?=$inwestycja->nazwa;?></a></h2>
+						<p><?=$inwestycja->lista;?></p>
+						<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/" class="bttn bttn-more">OPIS INWESTYCJI</a> <a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/plan-inwestycji/" class="bttn bttn-plan">ZNAJDŹ MIESZKANIE</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php } ?>
+<?php } else { ?>
+<div id="mainoffer">
+	<div class="fluid-container">
+		<div class="row no-gutters">
+<?php foreach($this->inwestycje as $inwestycja){?>
+			<div class="col-6">
+				<div class="mainoffer">
+					<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><img src="<?=$this->baseUrl;?>/files/inwestycje/miniaturka/<?=$inwestycja->miniaturka;?>" alt="<?=$inwestycja->nazwa;?>"></a>
+					<div class="mainoffer-desc">
+						<h2 class="source"><a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><?=$inwestycja->nazwa;?></a></h2>
+						<p><?=$inwestycja->lista;?></p>
+						<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/" class="bttn bttn-more">OPIS INWESTYCJI</a>  <a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/plan-inwestycji/" class="bttn bttn-plan">ZNAJDŹ MIESZKANIE</a>
+					</div>
+				</div>
+			</div>
+<?php } ?>
+		</div>
+	</div>
+</div>
+<?php } ?>

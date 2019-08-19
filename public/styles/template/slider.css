@@ -1,0 +1,70 @@
+#slider {width:100%}
+.rslidess{display:none}#slider{position:relative;width:100%;min-height:325px;background:#f1f1f1 url('../../gfx/template/loader.gif') no-repeat center center}.rslides{position:relative;list-style:none;overflow:hidden;width:100%;padding:0;margin:0}.rslides li{-webkit-backface-visibility:hidden;position:absolute;display:none;width:100%;left:0;top:0;margin:0;padding:0}.rslides li:before{display:none}.rslides li:first-child{position:relative;display:block;float:left}.rslides img{display:block;height:auto;float:left;width:100%;border:0}.rslides_tabs{position:absolute;right:70px;margin:0 auto;text-align:center;bottom:20px;z-index:990;padding:0}.rslides_tabs li{display:inline;float:none;_float:left;*float:left;margin-right:5px}.rslides_tabs a{text-indent:-9999px;overflow:hidden;-webkit-border-radius:15px;-moz-border-radius:15px;border-radius:15px;background:#393E4E;display:inline-block;_display:block;*display:block;width:14px;height:14px}.rslides_here a,.rslides_tabs a:hover{background:#C03636}
+
+.rslides_nav{z-index:3;position:absolute;top:0;bottom:0;margin:auto;overflow:hidden;text-decoration:none;margin:auto;display:block;text-align:center;width:107px;height:107px;font-size:95px;color:white;display:none}
+.rslides_nav:hover {background:rgba(0,139,170, 0.2);color:white}
+.rslides_nav:before{position:absolute;top:-21px}
+.rslides_nav.next:before{font-family:"FontAwesome";content:"\f105";text-align:center;font-size:95px;right:32px}
+.rslides_nav.next:hover:before{color:white}
+.rslides_nav.prev:before{font-family:"FontAwesome";content:"\f104";text-align:center;font-size:95px;left:32px}
+.rslides_nav.prev:hover:before{color:white}
+.rslides_nav.next{right:20px}
+.rslides_nav.prev{left:20px}
+
+.minislider {position:relative}
+.main-section .minislider ul {margin:0;list-style:none !important}
+.main-section .minislider ul li {padding:0}
+.main-section .minislider ul li:before {display:none}
+.apla {
+	position: absolute;
+	z-index: 800;
+	bottom: 70px;
+	left: 0;
+	width: 680px;
+}
+.apla h2 {
+	font-family: 'Source Serif Pro', serif;
+	font-weight: 600;
+	font-size: 60px;
+	color: white;
+	margin:0;
+	padding-left:65px;
+	background:url('../../gfx/template/apla-dots.png') no-repeat left top 13px
+}
+.apla p {
+	font-size: 13px;
+	line-height: 24px;
+	color: white;
+	margin:0;
+	font-weight:600;
+	text-transform:uppercase;
+	padding-left:65px
+}
+
+
+@media screen and (max-width:1730px) {
+	.apla h2 {
+		font-size: 47px;
+		line-height: 41px;
+	}
+	.apla {
+		bottom: 20px;
+	}
+}
+
+@media screen and (max-width:780px) {
+	.apla {width:100%}
+	.apla h2 {
+		font-size: 27px;
+		line-height: 23px;
+		padding: 0 30px;
+		text-indent: 0;
+		background: none;
+	}
+	.apla p {
+		font-size: 13px;
+		line-height: 24px;
+		text-indent: 0;
+		padding: 0 30px;
+	}
+}

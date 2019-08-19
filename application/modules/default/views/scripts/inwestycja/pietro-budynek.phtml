@@ -1,0 +1,147 @@
+<div id="plan" class="pietro-content">
+	<div class="fluid-container">
+		<div class="row">
+			<div class="col-3 inwestmenu">
+				<?php echo $this->render('inwestycja/aside.phtml');?>
+			</div>
+			
+			<div class="col-9 inwestdesc" style="padding-top:0">
+				<?php if($this->pietro->typ == 4 || $this->pietro->typ == 3){?>
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<?=replace($this->pietro->tekst); ?>
+						</div>
+					</div>
+				</div>
+				<?php } else { ?>
+			
+				<div class="container">
+					<div class="row pietro-nav">
+						<div class="col-4"><?php if($this->poprzednie) {?><a href="<?=$this->baseUrl; ?>/i/<?=$this->inwestycja->tag;?>/b/<?=$this->budynek->id;?>/p/<?=$this->poprzednie->numer;?>/typ/<?=$this->poprzednie->typ;?>/" class="bttn bttn-down bttn-nav">Piętro niżej</a><?php } ?></div>
+						<div class="col-4 text-center"><a href="<?=$this->baseUrl; ?>/i/<?=$this->inwestycja->tag;?>/b/<?=$this->budynek->id;?>/" class="bttn bttn-plan bttn-nav"><?=$this->budynek->nazwa;?></a></div>
+						<div class="col-4 text-right"><?php if($this->kolejne) {?><a href="<?=$this->baseUrl; ?>/i/<?=$this->inwestycja->tag;?>/b/<?=$this->budynek->id;?>/p/<?=$this->kolejne->numer;?>/typ/<?=$this->kolejne->typ;?>/" class="bttn bttn-up bttn-nav">Piętro wyżej</a><?php } ?></div>
+					</div>
+				</div>
+				
+				<div class="plan-holder">
+					<div id="plan">
+						<img src="<?=$this->baseUrl; ?>/files/inwestycje/pietro/<?=$this->pietro->plik;?>" alt="<?=$this->inwestycja->nazwa;?> - <?=$this->budynek->nazwa;?> - <?=$this->pietro->nazwa;?>" style="max-width:100%;height:auto;" id="myimagemap" usemap="#imagemap">
+						
+						<map name="imagemap">
+					<?php foreach($this->powierzchnia as $mieszkania) {
+					
+							if($mieszkania->status <> 2) {
+								$mieszkanie = str_replace('href=""','href="'.$this->baseUrl.'/i/'.$this->inwestycja->tag.'/b/'.$this->budynek->id.'/p/'.$this->pietro->numer.'/m/'.$mieszkania->numer.'/" data-id="'.$mieszkania->id.'"', $mieszkania->html);
+							} else {
+								$mieszkanie = str_replace('href=""','href="#"', $mieszkania->html);
+							}
+						
+							$mieszkanie =  str_replace('shape="polygon"','shape="poly"', $mieszkanie);
+							
+							if($mieszkania->mdm == 1){ $mdm = 'MdM: <b class=fr>'.taknie($mieszkania->mdm).'</b><br>'; } else {$mdm ='';}
+							
+							if($mieszkania->status == 1) {
+								$mieszkanie = str_replace('alt=""','id="'.$mieszkania->id.'" alt="" title="<b>'.$mieszkania->numer.'</b><br />Powierzchnia: <b class=fr>'.$mieszkania->metry.' m<sup>2</sup></b><br />Pokoje: <b class=fr>'.$mieszkania->pokoje.'</b><br />'.$mdm.''.statusMieszkania($mieszkania->status).'" data-color="green" class="inline forsale"', $mieszkanie);
+							}
+							if($mieszkania->status == 2) {
+								$mieszkanie = str_replace('alt=""','id="'.$mieszkania->id.'" alt="" title="<b>'.$mieszkania->numer.'</b><br />Powierzchnia: <b class=fr>'.$mieszkania->metry.' m<sup>2</sup></b><br />Pokoje: <b class=fr>'.$mieszkania->pokoje.'</b><br />'.$mdm.''.statusMieszkania($mieszkania->status).'" data-color="red" class="inline sold"', $mieszkanie);
+							}
+							if($mieszkania->status == 3) {
+								$mieszkanie = str_replace('alt=""','id="'.$mieszkania->id.'" alt="" title="<b>'.$mieszkania->numer.'</b><br />Powierzchnia: <b class=fr>'.$mieszkania->metry.' m<sup>2</sup></b><br />Pokoje: <b class=fr>'.$mieszkania->pokoje.'</b><br />'.$mdm.''.statusMieszkania($mieszkania->status).'" data-color="blue" class="inline reserved"', $mieszkanie);
+							}
+							if($mieszkania->status == 4) {
+								$mieszkanie = str_replace('alt=""','id="'.$mieszkania->id.'" alt="" title="<b>'.$mieszkania->numer.'</b><br />Powierzchnia: <b class=fr>'.$mieszkania->metry.' m<sup>2</sup></b><br />Pokoje: <b class=fr>'.$mieszkania->pokoje.'</b><br />'.$mdm.''.statusMieszkania($mieszkania->status).'" data-color="orange" class="inline rent"', $mieszkanie);
+							}
+							echo $mieszkanie;
+					} ?>
+						</map>
+					</div>
+				</div>
+				
+				<div id="search" class="inwestsearch">
+					<form id="searchOffer" method="get" action="">
+						<div class="row">
+							<div class="col-4">
+								<label for="s_pokoje">Pokoje</label>
+								<select name="s_pokoje" id="s_pokoje">
+									<option value="">Dowolna ilość</option>
+									<?php $var = explode(',', $this->pietro->zakres_pokoje); ?>
+									<?php foreach($var as $pozycja) {?>
+									<option value="<?=$pozycja;?>"<?php if($this->s_pokoje == $pozycja){echo ' selected="selected"';};?>><?=$pozycja;?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="col-4">
+								<label for="s_metry">Powierzchnia</label>
+								<select name="s_metry" id="s_metry">
+									<option value="">Dowolny metraż</option>
+									<?php $var = explode(',', $this->pietro->zakres_powierzchnia); ?>
+									<?php foreach($var as $pozycja) {?>
+									<option value="<?=$pozycja;?>"<?php if($this->s_metry == $pozycja){echo ' selected="selected"';};?>><?=$pozycja;?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="col-4 col-bttn">
+								<input type="hidden" name="a" value="szukaj">
+								<button type="submit" id="s_button" class="bttn bttn-search">Szukaj</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<h2 class="source lista">LISTA<div class="view"><span id="grid">Mała lista</span> <span id="list">Duża lista</span></div></h2>
+
+				<div id="offerList" class="fluid-container">
+					<?php if($this->wynik > 0){?>
+						<?php foreach($this->powierzchnia as $powierzchnia){?>
+						<div class="row pozycja-ap" data-id="<?=$powierzchnia->numer;?>" data-url="<?=$this->baseUrl;?>/i/<?=$this->inwestycja->tag?>/b/<?=$this->budynek->id;?>/p/<?=$powierzchnia->numer_pietro;?>/m/<?=$powierzchnia->numer;?>/">
+							
+						
+							<!-- Osiedlowa i budynkowa -->
+							<div class="col-2 status-ap-<?=statusMieszkaniaListaTag($powierzchnia->status);?> namelist">
+								<h2><?=$powierzchnia->numer;?></h2>
+							</div>
+							<div class="col-2">
+								<div class="<?=statusMieszkaniaListaTag($powierzchnia->status);?>-ap"><?=statusMieszkania($powierzchnia->status);?><?php if($powierzchnia->specjalny){?><br><div class="specjalny-ap"><?=$powierzchnia->specjalny;?></div><?php } ?></div>
+							</div>
+							<div class="col-3 paramlist">
+								<ul class="list-unstyled biglist mb-0">
+									<li>pokoje: <span><?=$powierzchnia->pokoje;?></span></li>
+									<li>powierzchnia: <span><?=$powierzchnia->metry;?>&nbsp; m<sup>2</sup></span></li>
+								<?php if($powierzchnia->numer_pietro || $powierzchnia->numer_pietro == '0'){?><?php if($powierzchnia->numer_pietro == '0'){?><li class="li-inwest-rwd">parter</span></li><?php } else {?><li class="li-inwest-rwd">piętro: <span><?=$powierzchnia->numer_pietro;?></span></li><?php } }?>
+								</ul>
+
+								<ul class="list-unstyled smalllist mb-0">
+									<li>pokoje: <span><?=$powierzchnia->pokoje;?></span></li>
+									<li>pow.: <span><?=$powierzchnia->metry;?>&nbsp; m<sup>2</sup></span></li>
+									<?php if($powierzchnia->numer_pietro || $powierzchnia->numer_pietro == '0'){?><?php if($powierzchnia->numer_pietro == '0'){?><li class="li-inwest-rwd">parter</span></li><?php } else {?><li class="li-inwest-rwd">piętro: <span><?=$powierzchnia->numer_pietro;?></span></li><?php } }?>
+								</ul>
+							</div>
+							<div class="col-2 col-room-thumb">
+							<!-- Osiedlowa i budynkowa -->
+							<?php if($this->inwestycja->typ == 2 || $this->inwestycja->typ == 1) {?>
+								<img src="<?=$this->baseUrl;?>/files/inwestycje/pomieszczenie/thumbs/<?=$powierzchnia->plik;?>" alt="Apartament nr. <?=$powierzchnia->numer;?>">
+							<?php } ?>
+							<!-- Domki -->
+							<?php if($this->inwestycja->typ == 3) {?>
+								<img src="<?=$this->baseUrl;?>/files/inwestycje/pomieszczenie/thumbs/<?=$powierzchnia->plik;?>" alt="Domek nr. <?=$powierzchnia->numer;?>">
+							<?php } ?>
+							</div>
+							<div class="col-3 text-right">
+								<?php if($powierzchnia->pdf){?><a href="<?=$this->baseUrl;?>/files/inwestycje/pdf/<?=$powierzchnia->pdf;?>" class="bttn bttn-doc" target="_blank">Pobierz plan .pdf</a><?php } ?>
+								<a href="<?=$this->baseUrl;?>/i/<?=$this->inwestycja->tag?>/b/<?=$this->budynek->id;?>/p/<?=$powierzchnia->numer_pietro;?>/m/<?=$powierzchnia->numer;?>/" class="bttn bttn-newcard" target="_blank">Otwórz w nowej karcie</a>						
+							</div>
+						</div>
+						<?php } ?>
+					<?php } else {?>
+						<div class="col-12 text-center">
+							<p><br>Brak wyników</p>
+						</div>
+					<?php } ?>
+				</div>
+			<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

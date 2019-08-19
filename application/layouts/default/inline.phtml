@@ -1,0 +1,343 @@
+	<script src="<?=$this->baseUrl; ?>/public/editor/tiny_mce_gzip.js" charset="utf-8"></script>
+	<script src="<?=$this->baseUrl; ?>/public/js/ui.js" charset="utf-8"></script>
+	
+	<link rel="stylesheet" href="<?=$this->baseUrl; ?>/public/styles/cms/ui.css" type="text/css">
+
+	<!-- Modal -->
+	<div class="modal fade" id="tinyMCEModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Edytuj</h5><button type="button" class="close" data-dismiss="modal" aria-label="Zamknij"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="inlineform formtytultekst"><?php echo new Form_InlineTytulTekstForm();?></div><div class="inlineform formtytultekstlink"><?php echo new Form_InlineTytulTekstLinkForm();?></div></div></div></div></div>
+	
+	<div class="modal fade" id="iconModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Boks z ikonką - wymiary: <span class="modalwidth"></span>px / <span class="modalheight"></span>px</h5><button type="button" class="close" data-dismiss="modal" aria-label="Zamknij"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="formicon"><?php echo new Form_InlineIconForm();?></div><div class="progress"><div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div></div></div></div></div>	
+	
+	<div class="modal fade" id="iconnewModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Boks z ikonką - wymiary: <span class="modalwidth"></span>px / <span class="modalheight"></span>px</h5><button type="button" class="close" data-dismiss="modal" aria-label="Zamknij"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="formicon"><?php echo new Form_InlineIconForm();?></div><div class="progress"><div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div></div></div></div></div>
+	
+	<div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Obrazek - wymiary: <span class="modalwidth"></span>px / <span class="modalheight"></span>px</h5><button type="button" class="close" data-dismiss="modal" aria-label="Zamknij"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="formicon"><?php echo new Form_InlinePlikForm();?></div><div class="progress"><div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div></div></div></div></div>
+	
+	<script type="text/javascript">
+	var fixHelper = function(e, ui) {
+		ui.children().each(function() {
+			$(this).width($(this).width());
+			$(this).height($(this).height());
+		});
+		return ui;
+	};
+	jQuery.fn.sortuj = function(sciezka){
+		this.sortable({ opacity: 0.6, cursor: 'move',
+            start: function(e,ui){
+                ui.placeholder.height(ui.item.outerHeight());
+                ui.placeholder.width(ui.item.outerWidth());
+            }, update: function() {
+			var order = $(this).sortable("serialize");
+			$.post(sciezka, order, function(theResponse){
+
+			});
+		}
+		});
+	};
+	
+	$(".positions").sortuj('http://127.0.0.1/kcms/sortuj/inline_icons/');
+	
+	$('#tinyMCEModal').on('shown.bs.modal', function (e) {
+		var inlineId = e.relatedTarget.dataset.inline;
+		var formType = e.relatedTarget.dataset.formtype;
+		var formId = e.relatedTarget.dataset.formid;
+		var inputsHide = e.relatedTarget.dataset.hideinput;
+		if (inputsHide) {
+			var substr = inputsHide.split(',');
+			var i;
+			for (i = 0; i < substr.length; ++i) {
+				$('.form-'+substr[i]).hide();
+			}
+		}
+		
+		$('.inlineform').hide();
+		$('.inlineform.'+formType).show();
+		var tinyMceEditor = '#'+formId;
+		
+		//console.log(tinyMceEditor);
+
+		$.ajax({
+			type: "POST",
+			url: "http://127.0.0.1/kcms/inline/"+inlineId+"/",
+			success: function(data) {
+				process_response(data, formType);
+				tinyMCE_GZ.init({plugins:'table,advimage,advlink,inlinepopups,insertdatetime,media,contextmenu,paste,noneditable,nonbreaking,template,advlist,imagemanager,xhtmlxtras',theme : "advanced",languages : 'pl',disk_cache : true,debug : false});
+				tinyMCE.init({selector: tinyMceEditor, theme : "advanced",plugins : "table,advimage,advlink,inlinepopups,insertdatetime,media,contextmenu,paste,noneditable,nonbreaking,template,advlist,imagemanager,xhtmlxtras",theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontsizeselect",theme_advanced_buttons2 : "bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,cleanup,code,|,insertdate,inserttime|,forecolor,backcolor",theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,attribs,|,galleryList,sliderList,karuzelaList,mapList",theme_advanced_buttons4 : "",theme_advanced_toolbar_location : "top",theme_advanced_toolbar_align : "left",theme_advanced_statusbar_location : "bottom",theme_advanced_resizing : true,language : "pl",theme_advanced_resize_horizontal : false,relative_urls : false,valid_elements : "*[*]",extended_valid_elements : "#p[*]",body_class : "myform",theme_advanced_path : false,setup : function(ed){ed.onKeyUp.add(function(ed, e){var tinylen, htmlcount;tinylen=ed.getContent().length;htmlcount="Ilość znaków: " + tinylen;tinymce.DOM.setHTML(tinymce.DOM.get(tinyMCE.activeEditor.id + '_path_row'), htmlcount);});ed.onInit.add(function(ed, evt){tinyMCE.activeEditor.setContent("");tinyMCE.activeEditor.setContent(data.modaleditor);});}});
+
+			},
+			error: function(){
+				alert('Wystąpił bład połączenia z bazą');
+			}
+		});
+
+		function process_response(response, formType){var frm=$("."+formType+" form"); var i; for (i in response){frm.find('[name="' + i + '"]').val(response[i]);console.log(i)}}
+
+		$('.inlineform form').on('submit', function(event) {
+			var tekst = tinyMCE.activeEditor.getContent();
+			var formType = $(this).attr('id');
+			
+			if(formType === 'eventForm1'){
+				var modaltytul = $('#eventForm1 input#modaltytul').val();
+				var dataString = 'modaltytul='+modaltytul+'&modaleditor='+encodeURIComponent(tekst);
+			}
+			if(formType === 'eventForm2'){
+				var modaltytul = $('#eventForm2 input#modaltytul').val();
+				var modallinkbutton = $('#eventForm2 input#modallinkbutton').val();
+				var modallink = $('#eventForm2 input#modallink').val();
+				var dataString = 'modaltytul='+modaltytul+'&modaleditor='+encodeURIComponent(tekst)+'&modallinkbutton='+modallinkbutton+'&modallink='+modallink;
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1/kcms/zapiszinline/"+inlineId+"/",
+				data: dataString,
+				dataType: "json",
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				beforeSend : function(){
+					$('#iconModal .formicon').hide();
+					$('#iconModal h5').text('Zapisuje...');
+					$('#iconModal .progress').css({"display":"flex"});
+				},				
+				success: function(data) {
+					if(data.status == "success"){
+						window.location.reload();
+					} else {
+						console.log('cos poszlo zle');
+					}
+				},
+				error: function(){
+					alert('Wystąpił bład połączenia z bazą');
+				}
+			});
+			event.preventDefault();
+		});
+	});	
+	
+	$('#iconModal').on('show.bs.modal', function (e) {
+		var inlineId = e.relatedTarget.dataset.inline;
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+		var inputsHide = e.relatedTarget.dataset.hideinput;
+		if (inputsHide) {
+			var substr = inputsHide.split(',');
+			var i;
+			for (i = 0; i < substr.length; ++i) {
+				$('.form-'+substr[i]).hide();
+			}
+		}
+		$('#iconModal span.modalheight').text(height);
+		$('#iconModal span.modalwidth').text(width);
+		document.getElementById("eventForm3").reset();
+		
+		$.ajax({
+			type: "POST",
+			url: "http://127.0.0.1/kcms/inlineicon/"+inlineId+"/",
+			success: function(data) {
+				process_responseIcons(data);
+			},
+			error: function(){
+				alert('Wystąpił bład połączenia z bazą');
+			}
+		});
+	});
+	
+	$('#iconModal').on('shown.bs.modal', function (e) {
+		var inlineId = e.relatedTarget.dataset.inline;
+		var placeId = e.relatedTarget.dataset.place;
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+
+		$('#iconModal form').on('submit', function(event) {
+			var formData = new FormData($('#eventForm3')[0]);
+			formData.append('obrazek', $('input[type=file]')[0].files[0]);
+			formData.append('iconheight', height);
+			formData.append('iconwidth', width);
+			
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1/kcms/zapiszicon/"+inlineId+"/",
+				data: formData,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				enctype: 'multipart/form-data',
+				processData: false,
+				contentType: false,
+				beforeSend : function(){
+					$('#iconModal .formicon').hide();
+					$('#iconModal h5').text('Zapisuje...');
+					$('#iconModal .progress').css({"display":"flex"});
+				},
+				cache: false,
+				success: function(data) {
+					if(data.status == "success"){
+						window.location.reload(true);
+					} else {
+						console.log('cos poszlo zle');
+					}
+				},
+				error: function(){
+					alert('Wystąpił bład połączenia z bazą');
+				}
+			});
+			event.preventDefault();
+		});
+	});
+	
+	$('#imgModal').on('show.bs.modal', function (e) {
+		var inlineId = e.relatedTarget.dataset.inline;
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+		$('#imgModal span.modalheight').text(height);
+		$('#imgModal span.modalwidth').text(width);
+		document.getElementById("eventForm5").reset();
+
+		$.ajax({
+			type: "POST",
+			url: "http://127.0.0.1/kcms/inlineimg/"+inlineId+"/",
+			success: function(data) {
+				process_responseGfx(data);
+			},
+			error: function(){
+				alert('Wystąpił bład połączenia z bazą');
+			}
+		});
+	});
+	
+	$('#imgModal').on('shown.bs.modal', function (e) {
+		var inlineId = e.relatedTarget.dataset.inline;
+		var placeId = e.relatedTarget.dataset.place;
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+
+		$('#imgModal form').on('submit', function(event) {
+			var formData = new FormData($('#eventForm5')[0]);
+			formData.append('obrazek', $('input[type=file]')[0].files[0]);
+			formData.append('iconheight', height);
+			formData.append('iconwidth', width);
+			
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1/kcms/zapiszimg/"+inlineId+"/",
+				data: formData,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				enctype: 'multipart/form-data',
+				processData: false,
+				contentType: false,
+				beforeSend : function(){
+					$('#imgModal .formicon').hide();
+					$('#imgModal h5').text('Zapisuje...');
+					$('#imgModal .progress').css({"display":"flex"});
+				},
+				cache: false,
+				success: function(data) {
+					if(data.status == "success"){
+						window.location.reload(true);
+					} else {
+						console.log('cos poszlo zle');
+					}
+				},
+				error: function(){
+					alert('Wystąpił bład połączenia z bazą');
+				}
+			});
+			event.preventDefault();
+		});
+	});
+
+	$('#iconnewModal').on('show.bs.modal', function (e) {
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+		var inputsHide = e.relatedTarget.dataset.hideinput;
+		if (inputsHide) {
+			var substr = inputsHide.split(',');
+			var i;
+			for (i = 0; i < substr.length; ++i) {
+				$('.form-'+substr[i]).hide();
+			}
+		}
+		$('#iconModal span.modalheight').text(height);
+		$('#iconModal span.modalwidth').text(width);
+
+	});
+
+	$('#iconnewModal').on('shown.bs.modal', function (e) {
+		$('#iconnewModal form').attr("id","eventForm4");
+		document.getElementById("eventForm4").reset();
+		var placeId = e.relatedTarget.dataset.place;
+		var width = e.relatedTarget.dataset.width;
+		var height = e.relatedTarget.dataset.height;
+		
+		$('#iconnewModal span.modalheight').text(height);
+		$('#iconnewModal span.modalwidth').text(width);
+
+		$('#eventForm4').on('submit', function(event) {
+			var formData = new FormData($('#eventForm4')[0]);
+			formData.append('obrazek', $('input[type=file]')[0].files[0]);
+			formData.append('iconheight', height);
+			formData.append('iconwidth', width);
+			
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1/kcms/nowaicon/"+placeId+"/",
+				data: formData,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				enctype: 'multipart/form-data',
+				processData: false,
+				contentType: false,
+				beforeSend : function(){
+					$('#iconnewModal .formicon').hide();
+					$('#iconnewModal h5').text('Zapisuje...');
+					$('#iconnewModal .progress').css({"display":"inline"});
+				},
+				cache: false,
+				success: function(data) {
+					if(data.status == "success"){
+						$('#iconnewModal form').attr("id","eventForm3");
+						window.location.reload(true);
+					} else {
+						console.log('cos poszlo zle');
+					}
+				},
+				error: function(data){
+					alert('Wystąpił bład połączenia z bazą');
+					console.log(data);
+				}
+			});
+			event.preventDefault();
+		});
+	});
+	
+	$(".btn-dell-icon").click(function(event) {
+		var iconIod = $(this).data("inline");
+		var dataString = 'id='+iconIod;
+
+		$.ajax({
+			type: "POST",
+			url: "http://127.0.0.1/kcms/usunicon/"+iconIod+"/",
+			data: dataString,
+			dataType: "json",
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			success: function(data) {
+				if(data.status == "success"){
+					window.location.reload();
+				} else {
+					console.log('cos poszlo zle');
+				}
+			},
+			error: function(){
+				alert('Wystąpił bład połączenia z bazą');
+			}
+		});
+		event.preventDefault();
+	});
+	
+	$('#tinyMCEModal').on('hide.bs.modal', function (e) {
+		var activeEditor = tinyMCE.activeEditor.id;
+		tinyMCE.execCommand('mceFocus', false, activeEditor);                    
+		tinyMCE.execCommand('mceRemoveControl', false, activeEditor);
+		$('.inlineform').hide();
+	});
+	
+	$('#iconnewModal').on('hide.bs.modal', function (e) {
+		$('#iconnewModal form').attr("id","eventForm3");
+		document.getElementById("eventForm3").reset();
+	});
+</script>

@@ -1,0 +1,39 @@
+<div id="plan">
+	<div class="fluid-container">
+		<div class="row">
+			<div class="col-3 inwestmenu">
+				<?php echo $this->render('inwestycja/aside.phtml');?>
+			</div>
+			
+			<div class="col-9 inwestdesc">
+				<?php if($this->inwestycja->header){?><img src="<?=$this->baseUrl;?>/files/inwestycje/header/<?=$this->inwestycja->header;?>" alt="<?=$this->inwestycja->nazwa;?>" class="mb-5"><?php } ?>
+				<?=replace($this->inwestycja->tekst); ?>
+				
+				<div class="row">
+					<div class="col-12"><hr class="mt-5 mb-3"></div>
+				</div>
+<?php if($this->atuty){?>
+				<div class="row">
+<?php foreach($this->atuty as $atut){?>
+					<div class="col-4 text-center">
+						<div class="potrzeba">
+							<div class="circle-icon"><img src="<?=$this->baseUrl;?>/files/inwestycje/atuty/<?=$atut->ikona;?>" alt="<?=$atut->nazwa;?>"></div>
+							<p><?=$atut->nazwa;?></p>
+						</div>
+					</div>
+<?php } ?>
+				</div>
+				
+				<div class="row">
+					<div class="col-12"><hr class="mt-5 mb-0"></div>
+				</div>
+<?php } ?>
+<?php if($this->inwestycja->opis){?>
+				<div class="row podikonkami">
+					<div class="col-12"><?=replace($this->inwestycja->opis); ?></div>
+				</div>
+<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>

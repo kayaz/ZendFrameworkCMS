@@ -1,0 +1,363 @@
+<?php 
+	$inlineStore = Zend_Registry::get('inlineStore');
+	$inlineIcons = Zend_Registry::get('inlineIcons');
+	$inlineImg = Zend_Registry::get('inlineImg');
+?>
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title><?= $this->header->nazwa; ?></title>
+    <meta name="description" content="<?= $this->header->opis ?>">
+    <meta name="keywords" content="<?= $this->header->klucze; ?>">
+<?php if($this->header->autor){?>
+	<meta name="author" content="<?= $this->header->autor; ?>">
+<?php } ?>
+	<meta name="robots" content="<?= $this->header->robots; ?>">
+	
+<?php if($this->header->share_plik) {?>
+	<meta property="og:title" content="<?=$this->header->share_tytul;?>">
+	<meta property="og:image" content="http://127.0.0.1/kcms/files/share/<?=$this->header->share_plik;?>">
+	<meta property="og:description" content="<?=$this->header->share_opis;?>">
+	<meta property="og:type" content="website">
+	<meta property="og:image:width" content="600">
+	<meta property="og:image:height" content="315">
+	<meta property="og:url" content="http://127.0.0.1/kcms/">
+<?php } ?>
+
+	<!-- Wylaczenie numeru tel. -->
+	<meta name="format-detection" content="telephone=no">
+	
+	<!-- Prefetch -->
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+
+	<!-- Styles -->
+    <link rel="stylesheet" href="<?=$this->baseUrl;?>/public/styles/template/bootstrap.css">
+    <link rel="stylesheet" href="<?=$this->baseUrl;?>/public/styles/template/slider.css">
+    <link rel="stylesheet" href="<?=$this->baseUrl;?>/public/styles/template/styles.css">
+	
+	<?= $this->header->head; ?>
+</head>
+<body id="mainpage">
+	<aside>
+        <ul>
+            <?php if($this->header->fb) {?><li><a rel="nofollow" target="_blank" class="Facebook" href="<?= $this->header->fb ?>"><span>Facebook</span></a></li><?php } ?>
+            <?php if($this->header->gplus) {?><li><a rel="nofollow" target="_blank" class="GPlus" href="<?= $this->header->gplus ?>"><span>Google +</span></a></li><?php } ?>
+            <?php if($this->header->tw) {?><li><a rel="nofollow" target="_blank" class="Twitter" href="<?= $this->header->tw ?>"><span>Twitter</span></a></li><?php } ?>
+            <?php if($this->header->telefon) {?><li><a rel="nofollow" target="_blank" class="Phone" href="tel:<?= $this->header->telefon ?>"><span>Zadzwoń</span></a></li><?php } ?>
+        </ul>
+	</aside>
+<div id="megamenu-opacity"></div>
+	<header>
+		<div id="header">
+			<div id="logo"><a href="<?=$this->baseUrl;?>/" title="<?= $this->header->nazwa; ?>"><img src="<?=$this->baseUrl;?>/public/gfx/template/logo.png" alt="<?= $this->header->nazwa; ?>"></a></div>
+
+			<nav class="navbar">
+				<ul class="nav justify-content-end list-unstyled mb-0">
+					<?php $menu = Zend_Registry::get('querymenu'); echo $menu->get_menu_html(0); ?>
+				</ul>
+			</nav>
+			
+			<div class="mobilemenu"><a href="#" id="triggermenu">MENU</a></div>
+		</div>
+	</header>
+	
+	<div id="slider" class="clearfix">
+		<ul class="rslidess list-unstyled">
+	<?php foreach($this->slider as $panel){?>
+		<li><img sizes="(max-width:380px) 33.3vw, (max-width:680px) 66.6vw, 100vw"
+			 srcset="<?=$this->baseUrl;?>/files/slider/desktop/<?=$panel->plik;?> 1920w, 
+			 <?=$this->baseUrl;?>/files/slider/<?=$panel->plik;?> 1920w, 
+			 <?=$this->baseUrl;?>/files/slider/tablet/<?=$panel->plik;?> 1024w,
+			 <?=$this->baseUrl;?>/files/slider/mobile/<?=$panel->plik;?> 580w"
+			 src="<?=$this->baseUrl;?>/files/slider/desktop/<?=$panel->plik;?>"
+			 alt="<?=$panel->tytul;?>">
+			 <div class="apla">
+				<div class="apla-inner">
+					<p><?=$panel->tytul;?></p>
+					<h2><?=$panel->tekst;?></h2>
+				</div>
+			 </div>
+		</li>
+	<?php } ?>
+		</ul>
+		
+		<div id="mainsearch">
+			<form method="get" action="<?=$this->baseUrl;?>/szukaj/" class="main-search">
+				<div class="container">
+					<div class="row">
+						<div class="col-4 search_input search_input_floor pr-0 pl-0">
+							<select class="selectpicker" name="s_pokoje">
+								<option value="">ILOŚĆ POKOI</option>
+								<?php $var = explode(';', $this->header->mieszkania_pokoje); ?>
+								<?php foreach($var as $pozycja) {?>
+								<option value="<?=$pozycja;?>"<?php if($this->pokoje == $pozycja){echo ' selected="selected"';};?>>Pokoje: <?=$pozycja;?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-4 search_input search_input_middle">
+							<select class="selectpicker" name="s_inwest">
+								<option value="">INWESTYCJA</option>
+								<?php foreach($this->inwestycje as $pozycja){?>
+								<option value="<?=$pozycja->id;?>"><?=$pozycja->nazwa;?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-4 search_input pr-0 pl-0">
+							<button type="submit">Szukaj</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="aboutus">
+		<div class="container">
+			<div class="row">
+				<div class="col-6 col-aboutmain-img">
+					<p class="section-title">KILKA SŁÓW O NAS</p>
+					<img src="<?=$this->baseUrl;?>/files/gfx/<?=$inlineImg[0]['plik'];?>" alt="<?=$inlineImg[0]['modaltytul'];?>">
+				</div>
+				<div class="col-6">
+					<div class="aboutus-text">
+						<h2 class="source"><?=$inlineStore[0]['modaltytul'];?></h2>
+						<?=$inlineStore[0]['modaleditor'];?>
+						<?php if($inlineStore[0]['modallink']){?><a href="<?=$inlineStore[0]['modallink'];?>" class="bttn bttn-more"><?=$inlineStore[0]['modallinkbutton'];?></a><?php } ?>
+					</div>
+					<?php if($this->user && $this->user->role == "admin"){?><div class="container"><div class="row"><div class="col-12 text-center col-inline-nav">
+					<button type="button" class="btn btn-primary btn-modal btn-sm" data-toggle="modal" data-target="#tinyMCEModal" data-inline="1" data-formtype="formtytultekstlink" data-formid="modaleditor2">Edytuj sekcję</button> <button type="button" class="btn btn-primary btn-modal btn-sm btn-modal-img" data-toggle="modal" data-target="#imgModal" data-inline="1" data-place="1" data-width="540" data-height="540">Zmień obrazek</button></div></div></div><?php } ?>
+					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<div class="inwestlist-title">
+						<h2 class="source">Aktualne inwestycje <br>w sprzedaży</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<?php if($this->inwestycjecount == 1){ ?>
+	<?php foreach($this->inwestycje as $inwestycja){?>
+	<div id="mainoffer">
+		<div class="fluid-container">
+			<div class="city-desc">
+				<div class="row no-gutters">
+					<div class="col-12">
+						<div class="">
+							<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><img src="<?=$this->baseUrl;?>/files/inwestycje/header/<?=$inwestycja->header;?>" alt="<?=$inwestycja->nazwa;?>"></a>
+							<div class="mainoffer-desc">
+								<h2 class="source"><a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><?=$inwestycja->nazwa;?></a></h2>
+								<p><?=$inwestycja->lista;?></p>
+								<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/" class="bttn bttn-more">OPIS INWESTYCJI</a> <a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/plan-inwestycji/" class="bttn bttn-plan">ZNAJDŹ MIESZKANIE</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+	<?php } else { ?>
+	<div id="mainoffer">
+		<div class="fluid-container">
+			<div class="row no-gutters">
+	<?php foreach($this->inwestycje as $inwestycja){?>
+				<div class="col-6">
+					<div class="mainoffer">
+						<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><img src="<?=$this->baseUrl;?>/files/inwestycje/miniaturka/<?=$inwestycja->miniaturka;?>" alt="<?=$inwestycja->nazwa;?>"></a>
+						<div class="mainoffer-desc">
+							<h2 class="source"><a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/"><?=$inwestycja->nazwa;?></a></h2>
+							<p><?=$inwestycja->lista;?></p>
+							<a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/" class="bttn bttn-more">OPIS INWESTYCJI</a>  <a href="<?=$this->baseUrl;?>/i/<?=$inwestycja->tag;?>/plan-inwestycji/" class="bttn bttn-plan">ZNAJDŹ MIESZKANIE</a>
+						</div>
+					</div>
+				</div>
+	<?php } ?>
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+
+	<div id="city">
+		<div class="fluid-container">
+			<div class="row no-gutters">
+				<div class="col-5">
+					<div class="city-desc">
+						<h2 class="source"><?=$inlineStore[1]['modaltytul'];?></h2>
+						<?=$inlineStore[1]['modaleditor'];?>
+						<?php if($inlineStore[1]['modallink']){?><a href="<?=$inlineStore[1]['modallink'];?>" class="bttn bttn-more"><?=$inlineStore[1]['modallinkbutton'];?></a><?php } ?>
+					</div>
+				</div>
+				<div class="col-7">
+					<img src="<?=$this->baseUrl;?>/files/gfx/<?=$inlineImg[1]['plik'];?>" alt="<?=$inlineStore[1]['modaltytul'];?>">
+				</div>
+				<?php if($this->user && $this->user->role == "admin"){?><div class="container"><div class="row"><div class="col-12 text-center col-inline-nav">
+					<button type="button" class="btn btn-primary btn-modal btn-sm" data-toggle="modal" data-target="#tinyMCEModal" data-inline="2" data-formtype="formtytultekstlink" data-formid="modaleditor2">Edytuj sekcję</button> <button type="button" class="btn btn-primary btn-modal btn-sm btn-modal-img" data-toggle="modal" data-target="#imgModal" data-inline="2" data-place="1" data-width="1110" data-height="600">Zmień obrazek</button></div></div></div><?php } ?>
+			</div>
+		</div>
+	</div>
+	
+	<div id="maincontact">
+		<div class="fluid-container">
+			<form method="post" action="<?=$this->baseUrl;?>/kontakt/" class="validateform">
+				<div class="row">
+					<div class="col-12">
+						<h2 class="source after-title">Skontaktuj się z nami</h2>
+						<p class="section-title after-h2">Z przyjemnością odpowiemy na wszystkie Twoje pytania</p>
+					</div>
+				</div>
+				<div class="form-row row">
+					<div class="col-3">
+						<div class="inputs">
+							<div class="input">
+								<label for="form_imie">Imię</label>
+								<input name="imie" id="form_imie" class="validate[required]" placeholder="Imię" type="text">
+							</div>
+							<div class="input">
+								<label for="form_email">E-mail</label>
+								<input name="email" id="form_email" class="validate[required,custom[email]]" placeholder="E-mail" type="email">
+							</div>
+							<div class="input">
+								<label for="form_tel">Telefon</label>
+								<input name="telefon" id="form_tel" class="validate[custom[phone]]" placeholder="Telefon" type="tel">
+							</div>
+						</div>
+					</div>
+					<div class="col-9">
+						<div class="input">
+							<label for="form_wiadomosc">Treść wiadmości</label>
+							<textarea name="wiadomosc" id="form_wiadomosc" placeholder="Treść wiadomości"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="form-row row">
+					<div class="col-12 obowiazek">
+						<?=$this->rodo->obowiazek;?>
+					</div>
+				</div>
+				<div class="form-row row">
+					<div class="col-12 rules">
+						<?php foreach($this->regulkis as $regulka){?>
+							<label for="zgoda_<?=$regulka['id'];?>" class="rules-text"><input name="zgoda_<?=$regulka['id'];?>" id="zgoda_<?=$regulka['id'];?>" value="1" type="checkbox" <?php if($regulka['wymagane'] == 1){;?>class="validate[required]"<?php } ?> data-prompt-position="topLeft:0"><p><?=$regulka['tresc'];?></p></label>
+							<div class="clr"></div>
+						<?php } ?>
+					</div>
+				</div>
+				<div class="form-row row">
+					<div class="col-6 col-6-form-info">
+						<ul class="formicons list-unstyled mb-0">
+							<li class="formicons-address">
+							<?php $form_dane_1 = explode("\n", $this->header->form_dane_1);
+								foreach($form_dane_1 as $dane_1){
+							?>
+								<p><?=$dane_1;?></p>
+							<?php } ?>
+							</li>
+							<li class="formicons-contact">
+							<?php $form_dane_2 = explode("\n", $this->header->form_dane_2);
+								foreach($form_dane_2 as $dane_2){
+							?>
+								<p><?=$dane_2;?></p>
+							<?php } ?>
+							</li>
+						</ul>
+					</div>
+					<div class="col-6 col-6-form-submit">
+						<div class="input text-right">
+							<script type="text/javascript">
+								document.write("<button class=\"bttn bttn-send\" type=\"submit\">WYŚLIJ</button>");
+							</script>
+							<noscript><p><b>Do poprawnego działania, Java musi być włączona.</b><p></noscript>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<?=$this->render('footer.phtml');?>
+
+	<div id="cookies"><p><a href="" class="closecookies gradient">Zamknij</a><?= $this->header->cookies; ?></p></div>
+
+	<!--Google font style-->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700|Source+Serif+Pro:400,600,700&amp;subset=latin-ext" rel="stylesheet">
+	
+	<!-- jQuery -->
+    <script src="<?=$this->baseUrl; ?>/public/js/jquery.js" charset="utf-8"></script>
+    <script src="<?=$this->baseUrl; ?>/public/js/main.js" charset="utf-8"></script>
+    <script src="<?=$this->baseUrl; ?>/public/js/welcome.js" charset="utf-8"></script>
+	<script src="<?=$this->baseUrl; ?>/public/js/popper.min.js" charset="utf-8"></script>
+	<script src="<?=$this->baseUrl; ?>/public/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="<?=$this->baseUrl; ?>/public/js/select.js" charset="utf-8"></script>
+	
+	<script src="<?=$this->baseUrl; ?>/public/js/validation.js" charset="utf-8"></script>
+	<script src="<?=$this->baseUrl; ?>/public/js/pl.js" charset="utf-8"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$(".rslidess").responsiveSlides({auto:<?=$this->header->slider_auto; ?>, pager:<?=$this->header->slider_pager; ?>, nav:<?=$this->header->slider_nav; ?>, timeout:<?=$this->header->slider_timeout; ?>, random:false, speed: <?=$this->header->slider_speed; ?>});
+		$('.selectpicker').selectpicker();
+		$(".input input, .input textarea").each(function () {
+			$(this).focus(function() {
+				$('label[for="'+this.id+'"]').fadeIn();
+			}).blur(function() {
+				if ($(this).val().length === 0) {
+					$('label[for="'+this.id+'"]').hide();
+				}
+			});
+		});
+
+		$(".validateform").validationEngine({
+			validateNonVisibleFields: true,
+			updatePromptsPosition:true,
+			promptPosition : "topRight:-128px"
+		});
+		
+<?php if($this->header->popup_status == 1){; ?>
+	<?php if($this->header->popup_tryb == 1){; ?>
+					$.cookie('popup', null);
+					$.magnificPopup.open({
+						items: {
+							src: '<div class="white-popup"><?= str_replace (array("\r\n", "\n", "\r"), ' ', $this->header->popup_tekst); ?></div>',
+							type: 'inline'
+						}
+					});
+						setTimeout( function(){ 
+							$.magnificPopup.close();
+						}, 10000 );
+	<?php } else {?>
+					if ($.cookie('popup') == null){
+						$.magnificPopup.open({
+							items: {
+								src: '<div class="white-popup"><?= str_replace (array("\r\n", "\n", "\r"), ' ', $this->header->popup_tekst); ?></div>',
+								type: 'inline'
+							}
+						});
+						setTimeout( function(){ 
+							$.magnificPopup.close();
+						}, 10000 );
+						$.cookie('popup','true');
+					}
+	<?php } ?>
+<?php } else {?>
+			$.cookie('popup', null);  
+<?php } ?>
+	});
+
+	$(window).resize(function() {
+
+	});
+
+	</script>
+	<?= $this->header->footer; ?>
+<?php if($this->user && $this->user->role == "admin"){?>
+	<?=$this->render('inline.phtml') ?>
+<?php } ?>
+</body>
+</html>
